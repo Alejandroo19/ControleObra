@@ -77,8 +77,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  
         'NAME': 'controle_obra',              
-        'USER': 'seu_usuario',                
-        'PASSWORD': 'sua_senha',              
+        'USER': 'obra_user',                
+        'PASSWORD': 'obra123',              
         'HOST': 'localhost',                  
         'PORT': '3306',                       
     }
