@@ -37,6 +37,7 @@
                         {% for valor in valores %}
                         <tr>
                             <td>R$ {{ valor.valor }}</td>
+                            <td>{{ valor.descricao|default:"-" }}</td>
                             <td>{{ valor.data|date:"d/m/Y H:i" }}</td>
                         </tr>
                         {% empty %}
@@ -64,6 +65,10 @@
                         <div class="mb-3">
                             <label for="valor" class="form-label">Valor:</label>
                             <input type="number" step="0.01" name="valor" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descricao" class="form-label">Descrição:</label>
+                            <textarea name="descricao" class="form-control" rows="3" placeholder="Descrição opcional"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Salvar</button>
                     </form>

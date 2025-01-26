@@ -22,6 +22,7 @@ def detalhe_obra(request, obra_id):
 
     if request.method == 'POST':
         valor = request.POST.get('valor')
+        descricao = request.POST.get('descricao')
         if valor:
             ValorAdicionado.objects.create(obra=obra, valor=valor)
             return redirect('detalhe_obra', obra_id=obra.id)

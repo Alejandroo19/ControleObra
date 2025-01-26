@@ -21,6 +21,7 @@ class Obra(models.Model):
 class ValorAdicionado(models.Model):
     obra = models.ForeignKey(Obra, on_delete=models.CASCADE, related_name='valores_adicionados')  # Nome único para o relacionamento
     valor = models.DecimalField(max_digits=10, decimal_places=2)
+    descricao = models.TextField(blank=True, null=True)  # Campo de descrição
     data = models.DateTimeField(default=now)
 
     def __str__(self):
