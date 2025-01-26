@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Obra
+from .models import Obra, ValorAdicionado
 
 
 def listar_obras(request):
@@ -15,6 +15,15 @@ def criar_obra(request):
     return render(request, 'criar_obra.html')
 
 
+
 def detalhe_obra(request, obra_id):
-    obra = get_object_or_404(Obra, id=obra_id)  # Busca a obra ou retorna 404 se não existir
-    return render(request, 'obra/detalhe_obra.html', {'obra': obra})
+    obra = get_object_or_404(Obra, id=obra_id)
+    valores = obra.valores_adicionados.all()  # Obtém todos os valores adicionados à obra
+
+    if request.method == 'POST':
+        valor = request.POST.get('valor')
+        if valor:
+            ValorAdicionado.objects.create(obra=obra, valor=valor)
+            return redirect('detalhe_obra', obra_id=obra.id)
+
+    return render(request, 'obra/detalhe_obra.html', {'obra': obra, 'valores': valores})

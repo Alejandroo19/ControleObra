@@ -12,7 +12,7 @@
         <div class="card">
             <div class="card-body">
                 <h1>{{ obra.nome }}</h1>
-                <p><strong>Valor:</strong> R$ {{ obra.valor }}</p>
+                <p><strong>Valor Total:</strong> R$ {{ obra.valor }}</p>
                 <p><strong>Status:</strong> {{ obra.status|title }}</p>
                 {% if obra.descricao %}
                     <p><strong>Descrição:</strong></p>
@@ -20,6 +20,54 @@
                 {% else %}
                     <p><em>Sem descrição.</em></p>
                 {% endif %}
+    
+                <!-- Botão para adicionar valor -->
+                <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#adicionarValorModal">Adicionar Valor</button>
+    
+                <!-- Tabela de valores -->
+                <h3 class="mt-4">Valores Adicionados</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Valor</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for valor in valores %}
+                        <tr>
+                            <td>R$ {{ valor.valor }}</td>
+                            <td>{{ valor.data|date:"d/m/Y H:i" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2">Nenhum valor adicionado.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Adicionar Valor -->
+    <div class="modal fade" id="adicionarValorModal" tabindex="-1" aria-labelledby="adicionarValorLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="adicionarValorLabel">Adicionar Valor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="valor" class="form-label">Valor:</label>
+                            <input type="number" step="0.01" name="valor" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Salvar</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
