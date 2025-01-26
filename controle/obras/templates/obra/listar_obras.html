@@ -1,33 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Obras</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        /* Customizações para o design */
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .search-bar {
+            margin: 15px 20px;
+        }
+        .add-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card .status {
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        .status-andamento {
+            background-color: yellow;
+            color: black;
+        }
+        .status-finalizada {
+            background-color: green;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <h1>OBRAS</h1>
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <input type="text" class="form-control w-75" placeholder="Search">
-            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#criarObraModal">+</a>
-        </div>
+    <!-- Cabeçalho -->
+    <div class="header">
+        OBRAS
+    </div>
+
+    <!-- Barra de busca -->
+    <div class="search-bar">
+        <input type="text" class="form-control" placeholder="Search">
+    </div>
+
+    <!-- Lista de Obras -->
+    <div class="container">
         <div class="row">
             {% for obra in obras %}
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ obra.nome }}</h5>
-                            <p class="card-text">Total: {{ obra.valor }}</p>
-                            <span class="badge {% if obra.status == 'andamento' %}bg-warning{% else %}bg-success{% endif %}">
-                                {{ obra.status|title }}
-                            </span>
+            <div class="col-12">
+                <div class="card p-3">
+                  <a href="{% url 'detalhe_obra' obra.id %}" class="text-decoration-none text-dark"> 
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title m-0">{{ obra.nome }}</h5>
+                            <p class="card-text m-0">Total: R$ {{ obra.valor }}</p>
+                        </div>
+                        <div class="status {% if obra.status == 'andamento' %}status-andamento{% else %}status-finalizada{% endif %}">
+                            {{ obra.status|title }}
                         </div>
                     </div>
+                  </a> 
                 </div>
+            </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Botão Adicionar -->
+    <a href="#" class="btn btn-primary rounded-circle add-button" data-bs-toggle="modal" data-bs-target="#criarObraModal">
+        <span class="fs-4">+</span>
+    </a>
+
+    <!-- Modal de Cadastro -->
     <div class="modal fade" id="criarObraModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -46,7 +106,7 @@
                             <label for="valor" class="form-label">Valor da Obra:</label>
                             <input type="number" step="0.01" name="valor" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button type="submit" class="btn btn-primary w-100">Salvar</button>
                     </form>
                 </div>
             </div>
