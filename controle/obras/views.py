@@ -24,7 +24,7 @@ def detalhe_obra(request, obra_id):
         valor = request.POST.get('valor')
         descricao = request.POST.get('descricao')
         if valor:
-            ValorAdicionado.objects.create(obra=obra, valor=valor)
+            ValorAdicionado.objects.create(obra=obra, valor=valor, descricao=descricao)
             return redirect('detalhe_obra', obra_id=obra.id)
 
     return render(request, 'obra/detalhe_obra.html', {'obra': obra, 'valores': valores})
