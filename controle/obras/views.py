@@ -18,14 +18,19 @@ def criar_obra(request):
 
 def detalhe_obra(request, obra_id):
     obra = get_object_or_404(Obra, id=obra_id)
-    valores = obra.valores_adicionados.all()  # Obtém todos os valores adicionados à obra
+    valores = obra.valores_adicionados.all()
 
     if request.method == 'POST':
         valor = request.POST.get('valor')
         descricao = request.POST.get('descricao')
         if valor:
             ValorAdicionado.objects.create(obra=obra, valor=valor, descricao=descricao)
-            obra.verificar_status()
-            return redirect('detalhe_obra', obra_id=obra.id)
+            obra.verificar_status()  # Verifica e atualiza o status da obra
+            if obra.status == 'finalizada':
+                # Redireciona para a página com um indicador de sucesso
+                return redirect(f'{request.path}?finalizada=true')
 
-    return render(request, 'obra/detalhe_obra.html', {'obra': obra, 'valores': valores})
+    # Verifica se a query string "finalizada=true" está presente
+    finalizada = request.GET.get('finalizada') == 'true'
+
+    return render(request, 'obra/detalhe_obra.html', {'obra': obra, 'valores': valores, 'finalizada': finalizada})
