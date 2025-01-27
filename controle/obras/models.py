@@ -18,6 +18,15 @@ class Obra(models.Model):
     def __str__(self):
         return self.nome
 
+    def verificar_status(self):
+        """
+        Atualiza o status da obra para 'Finalizada' se a soma dos valores adicionados for igual ao valor total.
+        """
+        soma_valores = sum(valor.valor for valor in self.valores_adicionados.all())
+        if soma_valores >= self.valor and self.status != 'finalizada':
+            self.status = 'finalizada'
+            self.save()
+            
 class ValorAdicionado(models.Model):
     obra = models.ForeignKey(Obra, on_delete=models.CASCADE, related_name='valores_adicionados')  # Nome único para o relacionamento
     valor = models.DecimalField(max_digits=10, decimal_places=2)
