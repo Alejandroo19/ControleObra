@@ -23,13 +23,18 @@ def detalhe_obra(request, obra_id):
     if request.method == 'POST':
         valor = request.POST.get('valor')
         descricao = request.POST.get('descricao')
-        if valor:
-            ValorAdicionado.objects.create(obra=obra, valor=valor, descricao=descricao)
+        forma_pagamento = request.POST.get('forma_pagamento')
+        if valor and forma_pagamento:
+            ValorAdicionado.objects.create(
+                obra=obra,
+                valor=valor,
+                descricao=descricao,
+                forma_pagamento=forma_pagamento
+            )
             obra.verificar_status()  # Verifica e atualiza o status da obra
             if obra.status == 'finalizada':
-                # Redireciona para a página com um indicador de sucesso
                 return redirect(f'{request.path}?finalizada=true')
-
+            return redirect('detalhe_obra', obra_id=obra.id)
     # Verifica se a query string "finalizada=true" está presente
     finalizada = request.GET.get('finalizada') == 'true'
 

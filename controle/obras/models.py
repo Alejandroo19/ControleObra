@@ -28,16 +28,23 @@ class Obra(models.Model):
             self.save()
             
 class ValorAdicionado(models.Model):
-    obra = models.ForeignKey(Obra, on_delete=models.CASCADE, related_name='valores_adicionados')  # Nome único para o relacionamento
+    FORMA_PAGAMENTO_CHOICES = [
+        ('pix', 'PIX'),
+        ('dinheiro', 'Dinheiro'),
+        ('credito', 'Cartão de Crédito'),
+        ('debito', 'Cartão de Débito'),
+    ]
+    obra = models.ForeignKey(Obra, on_delete=models.CASCADE, related_name='valores_adicionados')
     valor = models.DecimalField(max_digits=10, decimal_places=2)
-    descricao = models.TextField(blank=True, null=True)  # Campo de descrição
+    descricao = models.TextField(blank=True, null=True) 
     data = models.DateTimeField(default=now)
+    forma_pagamento = models.CharField(max_length=10, choices=FORMA_PAGAMENTO_CHOICES)
 
     def __str__(self):
         return f"{self.obra.nome} - R$ {self.valor}"
 
 class ValorObra(models.Model):
-    obra = models.ForeignKey(Obra, on_delete=models.CASCADE, related_name='valores_obra')  # Nome único para o relacionamento
+    obra = models.ForeignKey(Obra, on_delete=models.CASCADE, related_name='valores_obra')
     valor = models.DecimalField(max_digits=10, decimal_places=2)
     data = models.DateTimeField(default=now)
 
