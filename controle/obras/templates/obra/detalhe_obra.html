@@ -40,6 +40,7 @@
                             <th>Valor</th>
                             <th>Descrição</th>
                             <th>Data</th>
+                            <th>Forma de Pagamento</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,6 +49,7 @@
                             <td>R$ {{ valor.valor }}</td>
                             <td>{{ valor.descricao|default:"-" }}</td>
                             <td>{{ valor.data|date:"d/m/Y H:i" }}</td>
+                            <td>{{ valor.get_forma_pagamento_display }}</td>
                         </tr>
                         {% empty %}
                         <tr>
