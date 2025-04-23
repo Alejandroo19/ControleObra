@@ -23,7 +23,6 @@ def detalhe_obra(request, obra_id):
 
     if request.method == 'POST':
         if 'valor' in request.POST:
-            # Lógica para valor
             valor = request.POST.get('valor')
             descricao = request.POST.get('descricao')
             forma_pagamento = request.POST.get('forma_pagamento')

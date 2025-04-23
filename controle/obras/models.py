@@ -19,9 +19,6 @@ class Obra(models.Model):
         return self.nome
 
     def verificar_status(self):
-        """
-        Atualiza o status da obra para 'Finalizada' se a soma dos valores adicionados for igual ao valor total.
-        """
         soma_valores = sum(valor.valor for valor in self.valores_adicionados.all())
         if soma_valores >= self.valor and self.status != 'finalizada':
             self.status = 'finalizada'
