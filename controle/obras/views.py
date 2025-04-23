@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Obra, ValorAdicionado
+from .models import Obra, ValorAdicionado, FuncionarioObra 
 
 
 def listar_obras(request):
@@ -19,23 +19,43 @@ def criar_obra(request):
 def detalhe_obra(request, obra_id):
     obra = get_object_or_404(Obra, id=obra_id)
     valores = obra.valores_adicionados.all()
+    funcionarios = obra.funcionarios.all()
 
     if request.method == 'POST':
-        valor = request.POST.get('valor')
-        descricao = request.POST.get('descricao')
-        forma_pagamento = request.POST.get('forma_pagamento')
-        if valor and forma_pagamento:
-            ValorAdicionado.objects.create(
-                obra=obra,
-                valor=valor,
-                descricao=descricao,
-                forma_pagamento=forma_pagamento
-            )
-            obra.verificar_status()  # Verifica e atualiza o status da obra
-            if obra.status == 'finalizada':
-                return redirect(f'{request.path}?finalizada=true')
-            return redirect('detalhe_obra', obra_id=obra.id)
-    # Verifica se a query string "finalizada=true" está presente
-    finalizada = request.GET.get('finalizada') == 'true'
+        if 'valor' in request.POST:
+            # Lógica para valor
+            valor = request.POST.get('valor')
+            descricao = request.POST.get('descricao')
+            forma_pagamento = request.POST.get('forma_pagamento')
 
-    return render(request, 'obra/detalhe_obra.html', {'obra': obra, 'valores': valores, 'finalizada': finalizada})
+            if valor and forma_pagamento:
+                ValorAdicionado.objects.create(
+                    obra=obra,
+                    valor=valor,
+                    descricao=descricao,
+                    forma_pagamento=forma_pagamento
+                )
+                obra.verificar_status()
+                if obra.status == 'finalizada':
+                    return redirect(f'{request.path}?finalizada=true')
+                return redirect('detalhe_obra', obra_id=obra.id)
+
+        elif 'nome_funcionario' in request.POST:
+            nome = request.POST.get('nome_funcionario')
+            diaria = request.POST.get('valor_diaria')
+
+            if nome and diaria:
+                FuncionarioObra.objects.create(
+                    obra=obra,
+                    nome=nome,
+                    valor_diaria=diaria
+                )
+                return redirect('detalhe_obra', obra_id=obra.id)
+
+    finalizada = request.GET.get('finalizada') == 'true'
+    return render(request, 'obra/detalhe_obra.html', {
+        'obra': obra,
+        'valores': valores,
+        'funcionarios': funcionarios,
+        'finalizada': finalizada
+    })

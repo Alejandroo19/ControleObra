@@ -50,3 +50,13 @@ class ValorObra(models.Model):
 
     def __str__(self):
         return f"{self.obra.nome} - Valor específico"
+    
+
+class FuncionarioObra(models.Model):
+    obra = models.ForeignKey(Obra, on_delete=models.CASCADE, related_name='funcionarios')
+    nome = models.CharField(max_length=255)
+    valor_diaria = models.DecimalField(max_digits=10, decimal_places=2)
+    data_adicionado = models.DateTimeField(default=now)
+
+    def __str__(self):
+        return f"{self.nome} ({self.obra.nome})"
